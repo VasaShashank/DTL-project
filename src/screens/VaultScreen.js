@@ -6,10 +6,11 @@ import { Input } from '../components/Input';
 import { Card } from '../components/Card';
 import { Modal } from '../components/Modal';
 import { StrengthMeter } from '../components/StrengthMeter';
+import { generateSecurityReport } from '../utils/ai-advisor';
 import { calculateEntropy, explainWeakness } from '../utils/security';
 
 export const VaultScreen = () => {
-    const { vaultItems, addPassword, deletePassword, reuseMap } = useVault();
+    const { vaultItems, addPassword, deletePassword, reuseMap, timeline, healthScore } = useVault();
     const [searchTerm, setSearchTerm] = useState('');
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
@@ -47,6 +48,21 @@ export const VaultScreen = () => {
                 h(Button, { onClick: () => setIsAddModalOpen(true), className: 'whitespace-nowrap' }, '+ Add Password')
             )
         ),
+
+        // AI Quick Tip
+        (() => {
+            const aiReport = generateSecurityReport(vaultItems, healthScore, reuseMap, timeline);
+            const topAction = aiReport.actions[0];
+            if (!topAction) return null;
+
+            return h(Card, { className: 'p-4 bg-indigo-900/10 border-indigo-500/20 flex items-center gap-4 mb-6' },
+                h('div', { className: 'w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center text-xl' }, '🤖'),
+                h('div', { className: 'flex-1' },
+                    h('h3', { className: 'text-sm font-bold text-indigo-400 uppercase tracking-wider mb-0.5' }, 'AI Security Tip'),
+                    h('p', { className: 'text-indigo-200 text-sm' }, topAction.text)
+                )
+            );
+        })(),
 
         // Grid
         filteredItems.length === 0

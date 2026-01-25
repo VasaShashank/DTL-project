@@ -2,6 +2,7 @@ import { h, cn } from '../utils/ui';
 import { useState } from 'react';
 import { useVault } from '../context/vault-context';
 import { useGamification } from '../context/gamification-context'; // New
+import { generateSecurityReport } from '../utils/ai-advisor';
 import { getSmartTips, calculateEntropy, estimateCrackTime, explainWeakness, calculateRadarMetrics } from '../utils/security';
 import { Input } from '../components/Input';
 import { Card } from '../components/Card';
@@ -20,11 +21,55 @@ export const AnalyzerScreen = () => {
 
     const { percent, checklist, isReady } = readiness;
 
+
+    const aiReport = generateSecurityReport(vaultItems, healthScore, reuseMap, timeline);
+
     return h('div', { className: 'max-w-4xl mx-auto flex flex-col gap-8' },
         h('div', {},
             h('h1', { className: 'text-3xl font-bold text-white mb-2' }, 'Security Analyzer'),
             h('p', { className: 'text-gray-400' }, 'Deep dive into your vault hygiene and password strength.')
         ),
+
+        // AI Security Advisor
+        h(Card, { className: 'p-6 bg-gradient-to-br from-zinc-900 to-black border-zinc-800 relative overflow-hidden' },
+            h('div', { className: 'absolute top-0 right-0 p-4 opacity-10 pointer-events-none' },
+                h('div', { className: 'text-9xl' }, '🤖')
+            ),
+            h('div', { className: 'flex items-start gap-4 relative z-10' },
+                h('div', { className: 'w-12 h-12 bg-indigo-500/20 rounded-full flex items-center justify-center text-2xl border border-indigo-500/50 flex-shrink-0' }, '🤖'),
+                h('div', { className: 'flex-1' },
+                    h('h2', { className: 'text-lg font-bold text-white mb-2 flex items-center gap-2' },
+                        'AI Security Advisor'
+                    ),
+                    h('p', { className: 'text-indigo-200 text-lg leading-relaxed font-light mb-6' }, `"${aiReport.riskSummary}"`),
+
+                    aiReport.problems.length > 0 && h('div', { className: 'mb-6' },
+                        h('h3', { className: 'text-xs font-bold text-gray-500 uppercase tracking-wider mb-3' }, 'Detected Issues'),
+                        h('div', { className: 'grid gap-2' },
+                            aiReport.problems.map((prob, i) =>
+                                h('div', { key: i, className: 'flex items-center gap-3 bg-red-500/10 border border-red-500/20 p-2 rounded' },
+                                    h('span', { className: 'text-red-400' }, '⚠️'),
+                                    h('span', { className: 'text-red-200 text-sm' }, prob.text)
+                                )
+                            )
+                        )
+                    ),
+
+                    aiReport.actions.length > 0 && h('div', {},
+                        h('h3', { className: 'text-xs font-bold text-gray-500 uppercase tracking-wider mb-3' }, 'Recommended Actions'),
+                        h('div', { className: 'grid gap-2' },
+                            aiReport.actions.map((action, i) =>
+                                h('div', { key: i, className: 'flex items-center gap-3 bg-neon-green/5 border border-neon-green/20 p-2 rounded' },
+                                    h('span', { className: 'text-neon-green' }, '⚡'),
+                                    h('span', { className: 'text-neon-green text-sm' }, action.text)
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        ),
+
 
         // 0. Security Readiness
         h(Card, { className: 'p-6 bg-zinc-950/80 border-zinc-800' },

@@ -27,8 +27,8 @@ export const Layout = ({ children, activeTab, onTabChange }) => {
         // Sidebar
         h('aside', { className: 'w-64 bg-zinc-950 border-r border-zinc-800 flex flex-col flex-shrink-0' },
             h('div', { className: 'p-6 flex items-center gap-3 border-b border-zinc-900/50' },
-                h('div', { className: 'w-8 h-8 bg-neon-green rounded flex items-center justify-center text-black font-bold shadow-neon-sm' }, 'P'),
-                h('span', { className: 'font-bold text-lg tracking-tight text-white' }, 'PassHygiene')
+                h('div', { className: 'w-8 h-8 bg-neon-green rounded flex items-center justify-center text-black font-bold shadow-neon-sm' }, 'V'),
+                h('span', { className: 'font-bold text-lg tracking-tight text-white' }, 'VaultGuard')
             ),
             h('nav', { className: 'flex-1 px-4 py-6 flex flex-col gap-2' },
                 navItems.map(item =>

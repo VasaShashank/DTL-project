@@ -1,13 +1,14 @@
 import { h } from '../utils/ui';
 import { Button } from '../components/Button';
+import { Card } from '../components/Card';
 
 export const HomeScreen = ({ onEnterVault }) => {
     return h('div', { className: 'min-h-screen bg-black flex items-center justify-center p-8' },
         h('div', { className: 'max-w-4xl w-full' },
             // Header
             h('div', { className: 'text-center mb-12' },
-                h('div', { className: 'w-20 h-20 bg-neon-green rounded-2xl flex items-center justify-center text-black font-bold text-3xl shadow-neon-lg mx-auto mb-6' }, 'P'),
-                h('h1', { className: 'text-4xl font-bold text-white mb-2 tracking-tight' }, 'PassHygiene'),
+                h('div', { className: 'w-20 h-20 bg-neon-green rounded-2xl flex items-center justify-center text-black font-bold text-3xl shadow-neon-lg mx-auto mb-6' }, 'V'),
+                h('h1', { className: 'text-4xl font-bold text-white mb-2 tracking-tight' }, 'VaultGuard'),
                 h('p', { className: 'text-gray-400 text-lg' }, 'Password Hygiene Tracker')
             ),
 
@@ -23,7 +24,7 @@ export const HomeScreen = ({ onEnterVault }) => {
                 h('div', { className: 'mb-8' },
                     h('h3', { className: 'text-xl font-bold text-white mb-4' }, 'Project Overview'),
                     h('div', { className: 'text-gray-300 space-y-3 leading-relaxed' },
-                        h('p', {}, 'PassHygiene is a client-side, zero-knowledge password hygiene tracker built entirely using React, Web Crypto API, and IndexedDB. With no backend or server infrastructure, all data remains encrypted locally on your device.'),
+                        h('p', {}, 'VaultGuard is a client-side, zero-knowledge password hygiene tracker built entirely using React, Web Crypto API, and IndexedDB. With no backend or server infrastructure, all data remains encrypted locally on your device.'),
                         h('p', {}, 'The application focuses on:'),
                         h('ul', { className: 'list-disc list-inside space-y-2 ml-4 text-gray-400' },
                             h('li', {}, 'Secure password storage with AES-GCM encryption'),
@@ -33,7 +34,40 @@ export const HomeScreen = ({ onEnterVault }) => {
                             h('li', {}, 'Security analytics and visualization'),
                             h('li', {}, 'Gamification to encourage better security behavior')
                         ),
-                        h('p', { className: 'text-gray-300' }, 'PassHygiene is designed to educate users about good password practices while protecting sensitive data through zero-knowledge encryption.')
+                        h('p', { className: 'text-gray-300' }, 'VaultGuard is designed to educate users about good password practices while protecting sensitive data through zero-knowledge encryption.')
+                    )
+                ),
+
+                // PROOF OF SAFETY SECTION (Added for User Trust)
+                h(Card, { className: 'mb-8 bg-zinc-950 border border-green-900/30 p-6 relative overflow-hidden' },
+                    h('div', { className: 'absolute inset-0 bg-green-500/5 pointer-events-none' }),
+                    h('h2', { className: 'text-xl font-bold text-white mb-4 flex items-center gap-2' },
+                        h('span', { className: 'text-2xl' }, '🕵️'),
+                        'Verify It Yourself (The "Don\'t Trust, Verify" Guide)'
+                    ),
+                    h('p', { className: 'text-gray-400 mb-6' }, 'You don\'t need to see the code to prove this app is safe. You can verify the "Zero-Knowledge" claim using these simple tests suited for anyone.'),
+
+                    h('div', { className: 'grid grid-cols-1 md:grid-cols-3 gap-6' },
+                        // Test 1: Offline
+                        h('div', { className: 'bg-black/40 p-4 rounded-xl border border-zinc-800' },
+                            h('h3', { className: 'font-bold text-white mb-2' }, 'Test 1: The Airplane Mode'),
+                            h('p', { className: 'text-sm text-gray-400 mb-3' }, 'Disconnect your internet entirely. The app will still work perfectly (Add, Edit, Analyze).'),
+                            h('div', { className: 'text-xs text-green-400 font-mono bg-green-900/10 p-2 rounded' }, 'Proof: No server connection is required for functionality.')
+                        ),
+
+                        // Test 2: Network
+                        h('div', { className: 'bg-black/40 p-4 rounded-xl border border-zinc-800' },
+                            h('h3', { className: 'font-bold text-white mb-2' }, 'Test 2: The Network Tab'),
+                            h('p', { className: 'text-sm text-gray-400 mb-3' }, 'Right-click anywhere > "Inspect". Find the "Network" tab. Do anything in the app. You will see 0 requests sent.'),
+                            h('div', { className: 'text-xs text-green-400 font-mono bg-green-900/10 p-2 rounded' }, 'Proof: No data leaves your browser.')
+                        ),
+
+                        // Test 3: Storage
+                        h('div', { className: 'bg-black/40 p-4 rounded-xl border border-zinc-800' },
+                            h('h3', { className: 'font-bold text-white mb-2' }, 'Test 3: The Blob Check'),
+                            h('p', { className: 'text-sm text-gray-400 mb-3' }, 'In that same panel, go to "Application" tab (Header) > "IndexedDB" (Left Sidebar). Click "vault" to see the gibberish data.'),
+                            h('div', { className: 'text-xs text-green-400 font-mono bg-green-900/10 p-2 rounded' }, 'Proof: Even if hacked, they only get scrambled data.')
+                        )
                     )
                 ),
 

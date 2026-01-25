@@ -40,7 +40,7 @@ export const LoginScreen = () => {
     return h('div', { className: 'flex h-screen w-full items-center justify-center bg-black bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-zinc-900 via-black to-black' },
         h('div', { className: 'w-full max-w-md p-8 bg-zinc-950/50 backdrop-blur-xl border border-zinc-800 rounded-2xl shadow-2xl animate-in fade-in zoom-in-95 duration-500' },
             h('div', { className: 'flex flex-col items-center mb-8' },
-                h('div', { className: 'w-16 h-16 bg-neon-green rounded-2xl flex items-center justify-center text-black font-bold text-3xl mb-4 shadow-neon' }, 'P'),
+                h('div', { className: 'w-16 h-16 bg-neon-green rounded-2xl flex items-center justify-center text-black font-bold text-3xl mb-4 shadow-neon' }, 'V'),
                 h('h1', { className: 'text-2xl font-bold text-white' }, isSetup ? 'Unlock Vault' : 'Create Vault'),
                 h('p', { className: 'text-gray-400 text-sm mt-3 text-center leading-relaxed' },
                     isSetup

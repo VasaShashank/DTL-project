@@ -42,6 +42,41 @@ export const ThreatModelScreen = () => {
             )
         ),
 
+
+
+        // PROOF OF SAFETY SECTION (Added for User Trust)
+        h(Card, { className: 'mb-8 bg-zinc-950 border border-green-900/30 p-6 relative overflow-hidden' },
+            h('div', { className: 'absolute inset-0 bg-green-500/5 pointer-events-none' }),
+            h('h2', { className: 'text-xl font-bold text-white mb-4 flex items-center gap-2' },
+                h('span', { className: 'text-2xl' }, '🕵️'),
+                'Verify It Yourself (The "Don\'t Trust, Verify" Guide)'
+            ),
+            h('p', { className: 'text-gray-400 mb-6' }, 'You don\'t need to see the code to prove this app is safe. You can verify the "Zero-Knowledge" claim using these simple tests suited for anyone.'),
+
+            h('div', { className: 'grid grid-cols-1 md:grid-cols-3 gap-6' },
+                // Test 1: Offline
+                h('div', { className: 'bg-black/40 p-4 rounded-xl border border-zinc-800' },
+                    h('h3', { className: 'font-bold text-white mb-2' }, 'Test 1: The Airplane Mode'),
+                    h('p', { className: 'text-sm text-gray-400 mb-3' }, 'Disconnect your internet entirely. The app will still work perfectly (Add, Edit, Analyze).'),
+                    h('div', { className: 'text-xs text-green-400 font-mono bg-green-900/10 p-2 rounded' }, 'Proof: No server connection is required for functionality.')
+                ),
+
+                // Test 2: Network
+                h('div', { className: 'bg-black/40 p-4 rounded-xl border border-zinc-800' },
+                    h('h3', { className: 'font-bold text-white mb-2' }, 'Test 2: The Network Tab'),
+                    h('p', { className: 'text-sm text-gray-400 mb-3' }, 'Right-click anywhere > "Inspect". Find the "Network" tab. Do anything in the app. You will see 0 requests sent.'),
+                    h('div', { className: 'text-xs text-green-400 font-mono bg-green-900/10 p-2 rounded' }, 'Proof: No data leaves your browser.')
+                ),
+
+                // Test 3: Storage
+                h('div', { className: 'bg-black/40 p-4 rounded-xl border border-zinc-800' },
+                    h('h3', { className: 'font-bold text-white mb-2' }, 'Test 3: The Blob Check'),
+                    h('p', { className: 'text-sm text-gray-400 mb-3' }, 'In that same panel, go to "Application" tab (Header) > "IndexedDB" (Left Sidebar). Click "vault" to see the gibberish data.'),
+                    h('div', { className: 'text-xs text-green-400 font-mono bg-green-900/10 p-2 rounded' }, 'Proof: Even if hacked, they only get scrambled data.')
+                )
+            )
+        ),
+
         h(Card, { className: 'bg-zinc-950 border-zinc-900 p-6' },
             h('h2', { className: 'text-xl font-bold text-white mb-4' }, 'Detailed Tech Specs'),
             h('div', { className: 'grid grid-cols-1 md:grid-cols-2 gap-4 text-sm' },
