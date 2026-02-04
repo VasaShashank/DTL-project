@@ -1,3 +1,41 @@
+// Detect repeated substrings (e.g., "likeboys" repeated in "likeboyslikeboyslikeboys")
+export const detectRepeatedSubstrings = (password) => {
+    if (!password || password.length < 6) return null;
+
+    const len = password.length;
+    const pwd = password.toLowerCase();
+
+    // Try substring lengths from 3 to half the password length
+    for (let subLen = 3; subLen <= Math.floor(len / 2); subLen++) {
+        const substring = pwd.substring(0, subLen);
+
+        // Check if the password is mostly made of this substring repeated
+        let count = 0;
+        let pos = 0;
+
+        while (pos < len) {
+            if (pwd.substring(pos, pos + subLen) === substring) {
+                count++;
+                pos += subLen;
+            } else {
+                break;
+            }
+        }
+
+        // If we found 2+ repetitions covering most of the password
+        const coverage = (count * subLen) / len;
+        if (count >= 2 && coverage >= 0.7) {
+            return {
+                pattern: substring,
+                count: count,
+                coverage: Math.round(coverage * 100)
+            };
+        }
+    }
+
+    return null;
+};
+
 // Shannon entropy calculation
 export const calculateEntropy = (password) => {
     if (!password) return 0;
@@ -16,13 +54,52 @@ export const calculateEntropy = (password) => {
     return Math.floor(len * Math.log2(pool));
 };
 
+// Calculate effective entropy with pattern penalties
+export const calculateEffectiveEntropy = (password) => {
+    if (!password) return 0;
+
+    let entropy = calculateEntropy(password);
+    let penaltyFactor = 1.0; // Start with no penalty
+
+    // 1. Repeated substring penalty
+    const repeatedPattern = detectRepeatedSubstrings(password);
+    if (repeatedPattern) {
+        if (repeatedPattern.count >= 3) {
+            penaltyFactor *= 0.3; // 70% reduction for 3+ repetitions
+        } else if (repeatedPattern.count === 2) {
+            penaltyFactor *= 0.6; // 40% reduction for 2 repetitions
+        }
+    }
+
+    // 2. Dictionary word penalty
+    const pwd = password.toLowerCase();
+    const commonWords = ['password', 'admin', 'user', 'login', 'welcome', 'letmein', 'monkey', 'dragon', 'master'];
+    for (const word of commonWords) {
+        if (pwd.includes(word)) {
+            penaltyFactor *= 0.7; // 30% reduction
+            break;
+        }
+    }
+
+    // 3. Sequential pattern penalty
+    const sequences = ['123', '234', '345', '456', '567', '678', '789', 'abc', 'bcd', 'cde'];
+    for (const seq of sequences) {
+        if (pwd.includes(seq)) {
+            penaltyFactor *= 0.8; // 20% reduction
+            break;
+        }
+    }
+
+    return Math.floor(entropy * penaltyFactor);
+};
+
 export const estimateCrackTime = (entropy) => {
     if (entropy < 28) return 'Instantly';
-    if (entropy < 36) return 'Seconds';
-    if (entropy < 60) return 'Minutes to Hours';
-    if (entropy < 80) return 'Days to Years';
-    if (entropy < 100) return 'Centuries';
-    return 'Millennia';
+    if (entropy < 40) return 'Seconds to Minutes';
+    if (entropy < 50) return 'Hours to Days';
+    if (entropy < 65) return 'Weeks to Months';
+    if (entropy < 80) return 'Years';
+    return 'Centuries+';
 };
 
 export const checkReuse = (vaultItems) => {
@@ -189,6 +266,17 @@ export const explainWeakness = (password) => {
             type: 'entropy',
             severity: 'warning',
             message: `Low randomness (${entropy} bits). Vulnerable to brute-force attacks.`
+        });
+    }
+
+    // 2.5. Repeated word/phrase pattern detection (NEW)
+    const repeatedPattern = detectRepeatedSubstrings(password);
+    if (repeatedPattern) {
+        const severity = repeatedPattern.count >= 3 ? 'critical' : 'warning';
+        weaknesses.push({
+            type: 'repetition',
+            severity: severity,
+            message: `Contains repeated pattern "${repeatedPattern.pattern}" ${repeatedPattern.count} times (${repeatedPattern.coverage}% of password). This drastically reduces security.`
         });
     }
 

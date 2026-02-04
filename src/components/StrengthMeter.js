@@ -1,16 +1,16 @@
 import { h, cn } from '../utils/ui';
-import { calculateEntropy, estimateCrackTime } from '../utils/security';
+import { calculateEffectiveEntropy, estimateCrackTime } from '../utils/security';
 
 export const StrengthMeter = ({ password }) => {
-    const entropy = calculateEntropy(password);
+    const entropy = calculateEffectiveEntropy(password);
 
-    // Entropy tiers for visuals
+    // Entropy tiers for visuals (adjusted for realistic strength)
     let score = 0;
     if (entropy > 0) score = 1;
-    if (entropy >= 35) score = 2; // ~8 chars alnum
-    if (entropy >= 50) score = 3; // ~10 chars alnum
-    if (entropy >= 60) score = 4; // ~12 chars alnum
-    if (entropy >= 80) score = 5; // Good passphrase
+    if (entropy >= 40) score = 2; // Fair
+    if (entropy >= 50) score = 3; // Good
+    if (entropy >= 65) score = 4; // Strong
+    if (entropy >= 80) score = 5; // Excellent
 
     const colors = [
         'bg-zinc-800',
